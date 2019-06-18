@@ -1,0 +1,199 @@
+<!--
+  WDD4
+ * Advanced PHP
+ * Instructor: Steve George
+ * Author: Maryna Haidashevska
+ * Date: June 13, 2019
+ */
+-->
+
+<!doctype html>
+
+<html lang="en"> 
+  <head>
+    
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.5/css/bulma.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.6.10/vue.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.0/axios.js"></script>
+    <title>Assignment 1</title>
+    
+    <style>
+        
+        #search, #search_btn, #results{
+          position: absolute;
+          right: 150px;
+        }
+        #output{
+          margin-top: 15px;
+        }
+        #booklist{
+          margin-top: 25px;
+        }
+        #results{
+          margin-top: 45px;
+        }
+
+        #results ul li a{
+          color: #000;
+          font-size: 18px;
+          font-style: italic;
+          padding: 15px;
+        }
+        input{
+          height: 35px;
+          width: 350px;
+        }
+        img {
+          border: 1px solid #ddd; /* Gray border */
+          border-radius: 4px;  /* Rounded border */
+          padding: 5px; /* Some padding */
+          width: 90px; /* Set a small width */
+        }
+    </style>
+  </head> 
+
+ <body>
+
+<div id="app" class="container">
+    
+        <div class="columns is-mobile">
+
+
+            <div id="booklist" class="column is-four-fifths-mobile">
+               <h1 class="title">{{ title }}</h1>
+               <button class="button is-link" v-on:click="showTable=true">show all list</button>
+              <table class="table is-striped is-bordered">
+              <tr>
+                <th>Image</th>
+                <th>Title</th>
+                <th>Author</th>
+                <th>Genre</th>
+                <th>Format</th>
+                <th>Publisher</th>
+              </tr>
+              <tr v-for="book in books">
+                <td><a><img v-bind:src="'images/covers/'+book.image" 
+                            @click="showWddModal=true"/></a></td>
+                <td><a href="#" v-html="book.title" @click="showWddModal=true"></a></td>
+                <td v-html="book.author"></td>
+                <td v-html="book.genre"></td>
+                <td v-html="book.format"></td>
+                <td v-html="book.publisher"></td>
+            </tr>
+            </table>
+            </div>
+
+        </div> <!-- . columns -->
+        <wdd-modal v-show="showWddModal" @close="showWddModal=false" ></wdd-modal>
+</div> <!-- . container -->
+
+
+
+
+
+   <script>
+
+/**
+ * loaded DOM to allow load data
+ * @param  #booklist
+ * @return server.php
+
+    $(document).ready(function(){
+        $('#booklist').load('server.php');
+        });
+*/
+/**
+ * function for open modal box
+ * takes book_ai as an ittribute
+ * modal box
+ */
+/**
+  function showModal(el){
+
+      var id = $(el).attr('data-book_id');
+      //console.log(id);
+      // use load to populate the bookdetail div
+      $('#bookdetail').load('server.php?book_id='+id);
+      $('#modal').fadeOut();
+      $('#modal').addClass('is-active');
+      $('#modal').animate('0.5s');
+    }
+/**
+ * fucntion for closing modal
+ * @return VOID
+ 
+  function closeModal(){
+      $('#modal').removeClass('is-active');
+  } 
+
+/*
+ 
+Vue.component('maryna-table', {
+    props: ['title', 'author', 'genre', 'year'],
+    template:  `<table>
+                  <tr>
+                    <td v-html="book.title"></td>
+                    <td v-html="book.author"></td>
+                    <td v-html="book.genre"></td>
+                    <td v-html="book.year"></td>
+                  </tr> 
+                </table>`
+
+})
+*/
+
+Vue.component('wdd-modal', {
+  data: function(){
+    return {
+      message: 'This is a custom message for viers of this modal. If you can see it, the modal is working!'
+    }
+  }, 
+  template: `
+         <div class="modal is-active">
+          <div class="modal-background"></div>
+          <div class="modal-content">
+            <div class="box" >
+            <p v-html="message"></p>
+          </div>
+          </div>
+          <button class="modal-close is-large" v-on:click="$emit('close')" aria-label="close"></button>
+        </div>
+        `
+});
+
+var app = new Vue({
+    el: '#app',
+    data: {
+      books: [],
+      title: 'Booklist',
+      showTable: false,
+      showWddModal: false  
+    },
+
+    mounted: function(){
+
+      var self = this; 
+
+      axios.get('server.php')
+        .then(function(response){
+          self.books = response.data;
+          console.log(response);
+        })
+        .finally(function(){
+          self.showTable = true
+        })
+    },
+
+
+
+});
+
+    
+
+   </script>
+  </body>
+
+</html>
