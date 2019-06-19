@@ -78,10 +78,10 @@
                 <td><a><img v-bind:src="'images/covers/'+book.image" 
                             @click="showWddModal=true"/></a></td>
                 <td><a href="#" v-html="book.title" @click="showWddModal=true"></a></td>
-                <td v-html="book.author"></td>
-                <td v-html="book.genre"></td>
-                <td v-html="book.format"></td>
-                <td v-html="book.publisher"></td>
+                <td><a href="#" v-html="book.author" @click="searchAuthor(book.author_id)"></td> 
+                <td><a href="#" v-html="book.genre" @click="searchGenre(book.genre_id)"></td>  
+                <td><a href="#" v-html="book.publisher" @click="searchPublisher(book.publisher_id)"></td> 
+                <td><a href="#" v-html="book.format" @click="searchFormat(book.format_id)"></td> 
             </tr>
             </table>
             </div>
