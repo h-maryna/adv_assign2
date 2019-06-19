@@ -1,24 +1,13 @@
-<!--
-  WDD4
- * Advanced PHP
- * Instructor: Steve George
- * Author: Maryna Haidashevska
- * Date: June 18, 2019
- */
--->
-
-<!doctype html>
-
-<html lang="en"> 
-  <head>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="" />
     
-    <meta charset="utf-8" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.5/css/bulma.css" />
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.6.10/vue.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.0/axios.js"></script>
-    <title>Assignment 1</title>
+   
+   <title>Assignment 1</title>
     
     <style>
         
@@ -53,55 +42,56 @@
           width: 90px; /* Set a small width */
         }
     </style>
-  </head> 
-
- <body>
-
-<div id="app" class="container">
+</head>
+<body>
     
-        <div class="columns is-mobile">
-
-
-            <div id="booklist" class="column is-four-fifths-mobile">
-               <h1 class="title">{{ title }}</h1>
-               <button class="button is-link" v-on:click="showTable=true">show all list</button>
-              <table class="table is-striped is-bordered" v-show="showTable">
-              <tr>
-                <th>Image</th>
-                <th>Title</th>
-                <th>Author</th>
-                <th>Genre</th>
-                <th>Format</th>
-                <th>Publisher</th>
-              </tr>
-              <tr v-for="book in books">
-                <td><a><img v-bind:src="'images/covers/'+book.image" 
-                            @click="showWddModal=true"/></a></td>
-                <td><a href="#" v-html="book.title" @click="showModal(book.book_id)"></a></td>
-                <td><a href="#" v-html="book.author" @click="searchAuthor(book.author_id)"></td> 
-                <td><a href="#" v-html="book.genre" @click="searchGenre(book.genre_id)"></td>  
-                <td><a href="#" v-html="book.publisher" @click="searchPublisher(book.publisher_id)"></td> 
-                <td><a href="#" v-html="book.format" @click="searchFormat(book.format_id)"></td> 
-            </tr>
-            </table>
-            </div>
-
-        </div> <!-- . columns -->
+<div id="app"> 
+      
+  <div class="container columns">
+    <div class="column is-half is-offset-one-quarter">
+      <h1 class="title">{{title}}</h1>
+      <table v-show="showTable" class="table is-striped is-bordered">
+        <thead>
+        <tr>
+            <th>Image</th>
+            <th>Title</th>
+            <th>Author</th> 
+            <th>Genre</th> 
+            <th>Publisher</th> 
+            <th>Format</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr v-for="book in books">
+          <td><a @click="showModal(book.book_id);"  href="#"><img v-bind:src="'images/covers/' + book.image" />
+               </a> </td>
+          <td><a href="#" v-html="book.title" @click="showModal(book.book_id);"></td>
+          <td><a href="#" v-html="book.author" @click="searchAuthor(book.author_id)"></td> 
+         <td><a href="#" v-html="book.genre" @click="searchGenre(book.genre_id)"></td>  
+         <td><a href="#" v-html="book.publisher" @click="searchPublisher(book.publisher_id)"></td> 
+         <td><a href="#" v-html="book.format" @click="searchFormat(book.format_id)"></td> 
+        </tr>
+      </tbody>
+      </table> <!-- Table ends -->
        
-</div> <!-- . container -->
+    </div> <!-- ends column -->
+  </div><!-- /.container -->
 
-<!--  divs for modal -->
-<div v-show="showWddModal">
-    <div  class="modal is-active" >
+  <!--  divs for modal -->
+     <div v-show="showWddModal">
+      <div  class="modal is-active" >
       <div class="modal-background"></div>
         <div class="modal-content">
             <div class="box" id="detail" >
                 <h3 class="title" v-html="oneBook.title"></h3>
                 <div class="columns">
                     <div class="column">
-                        <figure class="image"><img v-bind:src="'images/covers/' + oneBook.image"/></figure>
+                        <figure class="image"><img v-bind:src="'images/covers/' + oneBook.image" /></figure>
                     </div>
+                    <div class="column"> 
                    
+                        <p v-html="oneBook.description"><strong>Book detail</strong>:<br /></p>
+                    </div>
                 </div>
             </div>
         </div>
@@ -109,120 +99,143 @@
     </div> 
 </div>
 </div>
-
-
-
-
-
-   <script>
-
-
+ 
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.10/dist/vue.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.0/axios.js"></script>
+    <script>
+        
+        
+// Creating a new Vue instance
 var app = new Vue({
-    el: '#app',
-    data: {
-      books: [],
-      title: 'Booklist',
-      showTable: false,
-      showWddModal: false,
+   el: "#app",
+   data: {
+      books: [], 
+      showTable: false ,
+      showWddModal: false, 
       oneBook:[],
-      id:false, 
-      book_id:'' 
-    },
-
-  methods: {  
-    showModal: function(new_id) 
-    {  
-      
-    this.id=true; 
-    this.book_id=new_id; 
-    var self = this;
-    axios.get('server.php?book_id='+this.book_id)
-    .then(function(response){
-      self.oneBook = response.data;   
-    })
-
-    .finally(function(){
-    self.showTable = true;
-    }); 
-    
-    this.showWddModal=true;
-    },
-    
-    searchAuthor:function(new_id){
-      this.id=true;
-      this.author_id=new_id;
-      var self = this;
-      axios.get('server.php?author_id='+this.author_id)
-      .then(function(response){
-        self.books= response.data;
-      })
-      .finally(function(){
-        self.showTable=true;
-      });
-    },
-
-    searchGenre:function(new_id){
-      this.id=true;
-      this.genre_id=new_id;
-      var self = this;
-      axios.get('server.php?genre_id='+this.genre_id)
-      .then(function(response){
-        self.books= response.data;
-      })
-      .finally(function(){
-        self.showTable=true;
-      });
-    },
-
-    searchPublisher:function(new_id){
-      this.id=true;
-      this.publisher_id=new_id;
-      var self = this;
-      axios.get('server.php?publisher_id='+this.publisher_id)
-      .then(function(response){
-        self.books= response.data;
-      })
-      .finally(function(){
-        self.showTable=true;
-      });
-    },
-
-    searchFormat:function(new_id){
-      this.id=true;
-      this.format_id=new_id;
-      var self = this;
-      axios.get('server.php?format_id='+this.format_id)
-      .then(function(response){
-        self.books= response.data;
-      })
-      .finally(function(){
-        self.showTable=true;
-      });
-    }
-
-    },
-
-    mounted: function(){
-
-      var self = this; 
-
-      axios.get('server.php')
+      id:false,  
+      title:'BookList',
+      book_id:'',
+      author_id:''
+   }, 
+   /**
+    * functions to show modal by book_id
+    * @type {Object}
+    */
+   methods: {  
+      showModal: function(new_id) 
+      {  
+        
+      this.id=true; 
+      this.book_id=new_id; 
+     var self = this;
+        axios.get('server.php?book_id='+this.book_id)
         .then(function(response){
-          self.books = response.data;
-          console.log(response);
-        })
+          self.oneBook = response.data;    
+      })
+
         .finally(function(){
-          self.showTable = true
-        })
-    },
+          self.showTable = true;
+      }); 
+      
+      this.showWddModal=true;
+      },
+      
+      /**
+       * function to sort by author id
+       * @param  {[type]} new_id [description]
+       * @return {[type]} author_id       [description]
+       */
+      searchAuthor:function(new_id){
+        this.id=true;
+        this.author_id=new_id;
+        var self = this;
+          axios.get('server.php?author_id='+this.author_id)
+          .then(function(response){
+            self.books= response.data;
+          })
+          .finally(function(){
+            self.showTable=true;
+          });
+      },
 
+       /**
+       * function to sort by genre id
+       * @param  {[type]} new_id [description]
+       * @return {[type]} genre_id       [description]
+       */
+      searchGenre:function(new_id){
+        this.id=true;
+        this.genre_id=new_id;
+        var self = this;
+          axios.get('server.php?genre_id='+this.genre_id)
+          .then(function(response){
+            self.books= response.data;
+          })
+          .finally(function(){
+            self.showTable=true;
+          });
+      },
 
+       /**
+       * function to sort by publisher id
+       * @param  {[type]} new_id [description]
+       * @return {[type]} publisher_id       [description]
+       */
+      searchPublisher:function(new_id){
+        this.id=true;
+        this.publisher_id=new_id;
+        var self = this;
+        axios.get('server.php?publisher_id='+this.publisher_id)
+          .then(function(response){
+            self.books= response.data;
+          })
+          .finally(function(){
+            self.showTable=true;
+          });
+      },
 
+       /**
+       * function to sort by format id
+       * @param  {[type]} new_id [description]
+       * @return {[type]} format_id       [description]
+       */
+      searchFormat:function(new_id){
+        this.id=true;
+        this.format_id=new_id;
+        var self = this;
+          axios.get('server.php?format_id='+this.format_id)
+          .then(function(response){
+            self.books= response.data;
+          })
+          .finally(function(){
+            self.showTable=true;
+          });
+        }
+
+   },
+
+  /**
+   * function to get datd from server
+   * @return {[type]} [description]
+   */
+  mounted: function() {
+    
+    var self = this;
+    axios.get('server.php')
+      .then(function(response){
+        self.books = response.data;
+      })
+      .finally(function(){
+        self.showTable = true;
+      }); 
+   }
 });
 
-    
+   
 
-   </script>
-  </body>
+      
 
+    </script>
+</body>
 </html>
