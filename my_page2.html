@@ -65,7 +65,7 @@
             <div id="booklist" class="column is-four-fifths-mobile">
                <h1 class="title">{{ title }}</h1>
                <button class="button is-link" v-on:click="showTable=true">show all list</button>
-              <table class="table is-striped is-bordered">
+              <table class="table is-striped is-bordered" v-show="showTable">
               <tr>
                 <th>Image</th>
                 <th>Title</th>
@@ -77,7 +77,7 @@
               <tr v-for="book in books">
                 <td><a><img v-bind:src="'images/covers/'+book.image" 
                             @click="showWddModal=true"/></a></td>
-                <td><a href="#" v-html="book.title" @click="showWddModal=true"></a></td>
+                <td><a href="#" v-html="book.title" @click="showModal(book.book_id)"></a></td>
                 <td><a href="#" v-html="book.author" @click="searchAuthor(book.author_id)"></td> 
                 <td><a href="#" v-html="book.genre" @click="searchGenre(book.genre_id)"></td>  
                 <td><a href="#" v-html="book.publisher" @click="searchPublisher(book.publisher_id)"></td> 
@@ -87,8 +87,28 @@
             </div>
 
         </div> <!-- . columns -->
-        <wdd-modal v-show="showWddModal" @close="showWddModal=false" ></wdd-modal>
+       
 </div> <!-- . container -->
+
+<!--  divs for modal -->
+<div v-show="showWddModal">
+    <div  class="modal is-active" >
+      <div class="modal-background"></div>
+        <div class="modal-content">
+            <div class="box" id="detail" >
+                <h3 class="title" v-html="oneBook.title"></h3>
+                <div class="columns">
+                    <div class="column">
+                        <figure class="image"><img v-bind:src="'images/covers/' + oneBook.image"/></figure>
+                    </div>
+                   
+                </div>
+            </div>
+        </div>
+        <button class="modal-close is-large" aria-label="close" @click="showWddModal = false" ></button>
+    </div> 
+</div>
+</div>
 
 
 
