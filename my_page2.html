@@ -4,17 +4,15 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content="" />
-    
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.5/css/bulma.css" />
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.10/dist/vue.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.0/axios.js"></script>
+    
    
-   <title>Assignment 1</title>
+   <title>Assignment 2</title>
     
     <style>
-        
-        #search, #search_btn, #results{
-          position: absolute;
-          right: 150px;
-        }
+       
         #output{
           margin-top: 15px;
         }
@@ -41,12 +39,7 @@
           padding: 5px; /* Some padding */
           width: 90px; /* Set a small width */
         }
-        button{
-          padding: 15px;
-          margin-bottom: 15px;
-          left: 510px;
-          position: absolute;
-        }
+      
     </style>
 </head>
 <body>
@@ -58,7 +51,7 @@
 
       <h1 class="title">{{title}}</h1>
       <button class="button is-light" @click="showTable = true" >Show all books</button>
-      <table v-show="showTable" class="table is-striped is-bordered">
+      <table v-show="showTable" class="table is-bordered">
         <thead>
         <tr>
             <th>Image</th>
@@ -97,8 +90,11 @@
                         <figure class="image"><img v-bind:src="'images/covers/' + oneBook.image" /></figure>
                     </div>
                     <div class="column"> 
-                   
-                        <p v-html="oneBook.description"><strong>Book detail</strong>:<br /></p>
+                        <strong>Book details: </strong><p v-html="oneBook.description"><br /></p>
+                        <strong>Year Published: </strong><p v-html="oneBook.year_published"><br /></p>
+                        <strong>Publisher: </strong><p v-html="oneBook.publisher"><br /></p>
+                        <strong>Format: </strong><p v-html="oneBook.format"><br /></p>
+
                     </div>
                 </div>
             </div>
@@ -108,10 +104,9 @@
 </div>
 </div>
  
-    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.10/dist/vue.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.0/axios.js"></script>
-    <script>
-        
+
+<script>
+    
         
 // Creating a new Vue instance
 var app = new Vue({
@@ -126,6 +121,23 @@ var app = new Vue({
       book_id:'',
       author_id:''
    }, 
+
+    /**
+   * function to get data from server
+   * @return {[type]} [description]
+   */
+  mounted: function() {
+    
+    var self = this;
+    axios.get('server.php')
+      .then(function(response){
+        self.books = response.data;
+      })
+      .finally(function(){
+        self.showTable = true;
+      }); 
+   },
+
    /**
     * functions to show modal by book_id
     * @type {Object}
@@ -136,7 +148,7 @@ var app = new Vue({
         
       this.id=true; 
       this.book_id=new_id; 
-     var self = this;
+      var self = this;
         axios.get('server.php?book_id='+this.book_id)
         .then(function(response){
           self.oneBook = response.data;    
@@ -221,23 +233,9 @@ var app = new Vue({
           });
         }
 
-   },
-
-  /**
-   * function to get data from server
-   * @return {[type]} [description]
-   */
-  mounted: function() {
-    
-    var self = this;
-    axios.get('server.php')
-      .then(function(response){
-        self.books = response.data;
-      })
-      .finally(function(){
-        self.showTable = true;
-      }); 
    }
+
+ 
 });
 
    
