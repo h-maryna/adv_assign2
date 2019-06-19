@@ -96,54 +96,7 @@
 
    <script>
 
-/**
- * loaded DOM to allow load data
- * @param  #booklist
- * @return server.php
 
-    $(document).ready(function(){
-        $('#booklist').load('server.php');
-        });
-*/
-/**
- * function for open modal box
- * takes book_ai as an ittribute
- * modal box
- */
-/**
-  function showModal(el){
-
-      var id = $(el).attr('data-book_id');
-      //console.log(id);
-      // use load to populate the bookdetail div
-      $('#bookdetail').load('server.php?book_id='+id);
-      $('#modal').fadeOut();
-      $('#modal').addClass('is-active');
-      $('#modal').animate('0.5s');
-    }
-/**
- * fucntion for closing modal
- * @return VOID
- 
-  function closeModal(){
-      $('#modal').removeClass('is-active');
-  } 
-
-/*
- 
-Vue.component('maryna-table', {
-    props: ['title', 'author', 'genre', 'year'],
-    template:  `<table>
-                  <tr>
-                    <td v-html="book.title"></td>
-                    <td v-html="book.author"></td>
-                    <td v-html="book.genre"></td>
-                    <td v-html="book.year"></td>
-                  </tr> 
-                </table>`
-
-})
-*/
 
 Vue.component('wdd-modal', {
   data: function(){
