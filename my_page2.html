@@ -41,6 +41,12 @@
           padding: 5px; /* Some padding */
           width: 90px; /* Set a small width */
         }
+        button{
+          padding: 15px;
+          margin-bottom: 15px;
+          left: 510px;
+          position: absolute;
+        }
     </style>
 </head>
 <body>
@@ -49,7 +55,9 @@
       
   <div class="container columns">
     <div class="column is-half is-offset-one-quarter">
+
       <h1 class="title">{{title}}</h1>
+      <button class="button is-light" @click="showTable = true" >Show all books</button>
       <table v-show="showTable" class="table is-striped is-bordered">
         <thead>
         <tr>
@@ -216,7 +224,7 @@ var app = new Vue({
    },
 
   /**
-   * function to get datd from server
+   * function to get data from server
    * @return {[type]} [description]
    */
   mounted: function() {
