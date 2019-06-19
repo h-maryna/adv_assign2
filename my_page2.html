@@ -1,3 +1,12 @@
+<!--
+  WDD4
+ * Advanced PHP
+ * Assignment 2 
+ * Instructor: Steve George
+ * Author: Maryna Haidashevska
+ * Date: June 18, 2019
+ */
+-->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -39,6 +48,9 @@
           padding: 5px; /* Some padding */
           width: 90px; /* Set a small width */
         }
+        #modal_content{
+          opacity: 0;
+        }
       
     </style>
 </head>
@@ -66,7 +78,7 @@
         <tr v-for="book in books">
           <td><a @click="showModal(book.book_id);"  href="#"><img v-bind:src="'images/covers/' + book.image" />
                </a> </td>
-          <td><a href="#" v-html="book.title" @click="showModal(book.book_id);"></td>
+          <td><a href="#" v-html="book.title" @click="showModal(book.book_id)"></td>
           <td><a href="#" v-html="book.author" @click="searchAuthor(book.author_id)"></td> 
          <td><a href="#" v-html="book.genre" @click="searchGenre(book.genre_id)"></td>  
          <td><a href="#" v-html="book.publisher" @click="searchPublisher(book.publisher_id)"></td> 
@@ -82,9 +94,9 @@
      <div v-show="showWddModal">
       <div  class="modal is-active" >
       <div class="modal-background"></div>
-        <div class="modal-content">
+        <div class="modal-content" style="opacity: 1">
             <div class="box" id="detail" >
-                <h3 class="title" v-html="oneBook.title"></h3>
+                <h2 class="title" v-html="oneBook.title"></h2>
                 <div class="columns">
                     <div class="column">
                         <figure class="image"><img v-bind:src="'images/covers/' + oneBook.image" /></figure>
@@ -94,6 +106,7 @@
                         <strong>Year Published: </strong><p v-html="oneBook.year_published"><br /></p>
                         <strong>Publisher: </strong><p v-html="oneBook.publisher"><br /></p>
                         <strong>Format: </strong><p v-html="oneBook.format"><br /></p>
+                        <strong>Price: $</strong><p v-html="oneBook.price"></p>
 
                     </div>
                 </div>
