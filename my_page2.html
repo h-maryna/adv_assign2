@@ -3,7 +3,7 @@
  * Advanced PHP
  * Instructor: Steve George
  * Author: Maryna Haidashevska
- * Date: June 13, 2019
+ * Date: June 18, 2019
  */
 -->
 
@@ -97,33 +97,89 @@
    <script>
 
 
-
-Vue.component('wdd-modal', {
-  data: function(){
-    return {
-      message: 'This is a custom message for viers of this modal. If you can see it, the modal is working!'
-    }
-  }, 
-  template: `
-         <div class="modal is-active">
-          <div class="modal-background"></div>
-          <div class="modal-content">
-            <div class="box" >
-            <p v-html="message"></p>
-          </div>
-          </div>
-          <button class="modal-close is-large" v-on:click="$emit('close')" aria-label="close"></button>
-        </div>
-        `
-});
-
 var app = new Vue({
     el: '#app',
     data: {
       books: [],
       title: 'Booklist',
       showTable: false,
-      showWddModal: false  
+      showWddModal: false,
+      oneBook:[],
+      id:false, 
+      book_id:'' 
+    },
+
+  methods: {  
+    showModal: function(new_id) 
+    {  
+      
+    this.id=true; 
+    this.book_id=new_id; 
+    var self = this;
+    axios.get('server.php?book_id='+this.book_id)
+    .then(function(response){
+      self.oneBook = response.data;   
+    })
+
+    .finally(function(){
+    self.showTable = true;
+    }); 
+    
+    this.showWddModal=true;
+    },
+    
+    searchAuthor:function(new_id){
+      this.id=true;
+      this.author_id=new_id;
+      var self = this;
+      axios.get('server.php?author_id='+this.author_id)
+      .then(function(response){
+        self.books= response.data;
+      })
+      .finally(function(){
+        self.showTable=true;
+      });
+    },
+
+    searchGenre:function(new_id){
+      this.id=true;
+      this.genre_id=new_id;
+      var self = this;
+      axios.get('server.php?genre_id='+this.genre_id)
+      .then(function(response){
+        self.books= response.data;
+      })
+      .finally(function(){
+        self.showTable=true;
+      });
+    },
+
+    searchPublisher:function(new_id){
+      this.id=true;
+      this.publisher_id=new_id;
+      var self = this;
+      axios.get('server.php?publisher_id='+this.publisher_id)
+      .then(function(response){
+        self.books= response.data;
+      })
+      .finally(function(){
+        self.showTable=true;
+      });
+    },
+
+    searchFormat:function(new_id){
+      this.id=true;
+      this.format_id=new_id;
+      var self = this;
+      axios.get('server.php?format_id='+this.format_id)
+      .then(function(response){
+        self.books= response.data;
+      })
+      .finally(function(){
+        self.showTable=true;
+      });
+    }
+
     },
 
     mounted: function(){
